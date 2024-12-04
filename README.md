@@ -1,3 +1,16 @@
+# Cordova Plugin for Thermal Printer's Customized for Sunmi V2s Pos Printer
+
+## Fork NOTE
+
+I added to the plugin from which I forked, a series of methods for printing text messages and images in base 64 format.
+The plugin has been tested on cordova 13 and on Sunmi V2s printer.
+
+After importing the plugin with the install procedure from this repository, import the SunmiV2sEscPos.js file into your project to view the various commands.
+
+Connection to Sunmi V2s Printer is via bluetooth on address 00:11:22:33:44:55 .
+
+I leave the original documentation of the plugin below.
+
 ## Cordova Plugin for Thermal Printer's
 [![npm version](https://img.shields.io/npm/v/thermal-printer-cordova-plugin.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin) [![npm downloads](https://img.shields.io/npm/dm/thermal-printer-cordova-plugin.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin)
 
@@ -9,16 +22,8 @@ This plugin is a wrapper for the [Android library for ESC/POS Thermal Printer](h
 
 #### Cordova
 
-    $ cordova plugin add thermal-printer-cordova-plugin
+    $ cordova plugin add https://github.com/SaverioDiDomenico/cordova-thermal-printer-plugin
 
-#### Ionic
-
-    $ ionic cordova plugin add thermal-printer-cordova-plugin
-
-#### Capacitor
-
-    $ npm install thermal-printer-cordova-plugin
-    $ npx cap sync
 
 Don't forget to add BLUETOOTH and INTERNET (for TCP) permissions and for USB printers the `android.hardware.usb.host` feature to the `AndroidManifest.xml`.
 
