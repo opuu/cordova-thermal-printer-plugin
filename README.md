@@ -63,7 +63,7 @@ Printing via Bluetooth is as easy as possible.
 ThermalPrinter.printFormattedText({
     type: 'bluetooth',
     id: 'first', // You can also use the identifier directly i. e. 00:11:22:33:44:55 (address) or name
-    text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
+    text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
 }, function() {
     console.log('Successfully printed!');
 }, function(error) {
@@ -84,7 +84,7 @@ ThermalPrinter.printFormattedText({
     address: '192.168.1.123',
     port: 9100,
     id: 'tcp-printer-001', // Use an unique identifier for each printer i. e. address:port or name
-    text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
+    text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
 }, function() {
     console.log('Successfully printed!');
 }, function(error) {
@@ -110,7 +110,7 @@ ThermalPrinter.listPrinters({type: 'usb'}, function(printers) {
             ThermalPrinter.printFormattedText({
                 type: 'usb',
                 id: printer.id,
-                text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
+                text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
             }, function() {
                 console.log('Successfully printed!');
             }, function(error) {
