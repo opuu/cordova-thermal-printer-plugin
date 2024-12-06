@@ -308,7 +308,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                     outWidth = (width * maxSize) / height; 
                 }
 
-                Bitmap resizedBitmap = Bitmap.createScaledBitmap(myBitmap, outWidth, outHeight, false);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(decodedByte, outWidth, outHeight, false);
 
                 StringBuilder textToPrint = new StringBuilder();
                 for(int y = 0; y < height; y += 256) {
