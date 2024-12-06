@@ -288,7 +288,26 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                 : data.optInt("dotsFeedPaper", 20);
             if (action.endsWith("Cut")) {
                 printer.printFormattedTextAndCut(data.getString("text"), dotsFeedPaper);
-            } else {
+            }else if(data.getString("text").contains("data:image")){
+                //Saverio
+
+                String encodedString = data.getString("text");
+                byte[] decodedString = Base64.decode(encodedString.contains(",") ? encodedString.substring(encodedString.indexOf(",") + 1) : encodedString, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                int width = decodedByte.getWidth(), height = decodedByte.getHeight();
+
+                StringBuilder textToPrint = new StringBuilder();
+                for(int y = 0; y < height; y += 256) {
+                    Bitmap bitmap = Bitmap.createBitmap(decodedByte, 0, y, width, (y + 256 >= height) ? height - y : 256);
+                    textToPrint.append("[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, bitmap) + "</img>\n");
+                }
+                
+                //textToPrint.append("[C]Printed!!!\n");
+                printer.printFormattedText(textToPrint.toString());
+                
+                
+            }else {
                 printer.printFormattedText(data.getString("text"), dotsFeedPaper);
             }
             callbackContext.success();
