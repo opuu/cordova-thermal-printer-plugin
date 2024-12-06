@@ -300,7 +300,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                 StringBuilder textToPrint = new StringBuilder();
                 for(int y = 0; y < height; y += 256) {
                     Bitmap bitmap = Bitmap.createBitmap(decodedByte, 0, y, width, (y + 256 >= height) ? height - y : 256);
-                    textToPrint.append("[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, bitmap) + "</img>\n");
+                    textToPrint.append("<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, bitmap) + "</img>\n");
                 }
                 
                 //textToPrint.append("[C]Printed!!!\n");
