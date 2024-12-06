@@ -1,29 +1,46 @@
 //Function to print an Image on sunmi v2s printer
 //Image parameter must be in base64 format
-function SunmiV2sendImage(successF,errorF,image){
-	ThermalPrinter.bitmapToHexadecimalString({
+function SunmiV2sendImage2(successF,errorF,base64Image){
+	
+				ThermalPrinter.bitmapToHexadecimalString({
+					type: 'bluetooth',
+					id: '00:11:22:33:44:55',
+					printerWidthMM: 58,
+					base64: base64Image
+				}
+				, function(img){
+				
+						var i = "<img>"+ img + "</img>\n";
+						ThermalPrinter.printFormattedText({
+						type: 'bluetooth',
+						id: '00:11:22:33:44:55',
+						printerWidthMM: 58,
+						mmFeedPaper: 15,
+						text: i
+						}
+						, successF
+						, errorF
+						);
+				
+				}, errorF
+				);
+				
+
+
+}
+
+function SunmiV2sendImage(successF,errorF,base64Image){
+	
+		ThermalPrinter.printFormattedText({
 		type: 'bluetooth',
 		id: '00:11:22:33:44:55',
 		printerWidthMM: 58,
-		base64: image
-	}
-	, function(img){
-	
-			var i = "<img>"+ img + "</img>";
-			ThermalPrinter.printFormattedText({
-			type: 'bluetooth',
-			id: '00:11:22:33:44:55',
-			printerWidthMM: 58,
-			mmFeedPaper: 15,
-			text: i
-			}
-			, successF
-			, errorF
-			);
-	
-	}, errorF
-	);
-
+		mmFeedPaper: 15,
+		text: base64Image
+		}
+		, successF
+		, errorF
+		);
 }
 
 //Function to send Text to Printer
@@ -85,23 +102,35 @@ ThermalPrinter.printFormattedText({
 
 }
 
+function SunmisendText(succ, err, testo, size, isBold,isUnderline){
 
-//Sample
-SunmiV2sendImage(
-function(a){console.log(a);},
-function(e){console.log(e);},
-b64
-);
+	var s = 1;
 
-//Sample
-SunmiV2sendText(
-function(a){console.log(a);},
-function(e){console.log(e);},
-"Sample Text",
-20,
-false,
-false,
-false
-);
+	if(size==20){
+		s = 1;
+	}else if(size==32){
+		s = 4;
+	}
+	
+	SunmiV2sendText(
+		succ,
+		err,
+		testo,
+		s,
+		isBold,
+		isUnderline,
+		false
+		);
+	
+}
 
+function SunmisendImage(succ, err, b64){
 
+		SunmiV2sendImage(
+		succ,
+		err,
+		b64
+		);
+
+			
+}
