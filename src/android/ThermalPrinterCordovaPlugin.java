@@ -297,7 +297,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
 
                 int width = decodedByte.getWidth(), height = decodedByte.getHeight();
 
-                int maxSize = 300;
+                int maxSize = 350;
                 int outWidth;
                 int outHeight;
                 if(width > height){
@@ -312,7 +312,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
 
                 StringBuilder textToPrint = new StringBuilder();
                 for(int y = 0; y < height; y += 256) {
-                    Bitmap bitmap = Bitmap.createBitmap(resizedBitmap, 0, y, width, (y + 256 >= height) ? height - y : 256);
+                    Bitmap bitmap = Bitmap.createBitmap(resizedBitmap, 0, y, outWidth, (y + 256 >= outHeight) ? outHeight - y : 256);
                     textToPrint.append("[L]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, bitmap) + "</img>\n");
                 }
                 
