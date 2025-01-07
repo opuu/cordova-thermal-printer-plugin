@@ -297,7 +297,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
 
                 int width = decodedByte.getWidth(), height = decodedByte.getHeight();
 
-                int maxSize = 820;
+                int maxSize = 800;
                 int outWidth;
                 int outHeight;
                 if(width > height){
