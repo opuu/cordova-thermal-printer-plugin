@@ -300,6 +300,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                 int maxSize = 850;
                 int outWidth;
                 int outHeight;
+                /*
                 if(width > height){
                     outWidth = maxSize;
                     outHeight = (height * maxSize) / width; 
@@ -307,6 +308,10 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                     outHeight = maxSize;
                     outWidth = (width * maxSize) / height; 
                 }
+                */
+
+                outWidth = maxSize;
+                outHeight = height;
 
                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(decodedByte, outWidth, outHeight, false);
 
