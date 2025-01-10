@@ -285,7 +285,7 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
         try {
             int dotsFeedPaper = data.has("mmFeedPaper")
                 ? printer.mmToPx((float) data.getDouble("mmFeedPaper"))
-                : data.optInt("dotsFeedPaper", 20);
+                : data.optInt("dotsFeedPaper", 0);
             if (action.endsWith("Cut")) {
                 printer.printFormattedTextAndCut(data.getString("text"), dotsFeedPaper);
             }else if(data.getString("text").contains("data:image")){
