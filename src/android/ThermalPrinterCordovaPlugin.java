@@ -327,7 +327,15 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
                 
                 
             }else {
-                printer.printFormattedText(data.getString("text"), dotsFeedPaper);
+
+                String stampa = "";
+                try {
+                    stampa = data.getString("text");
+                    stampa = stampa.substring(1);
+                }catch (Exception e) {
+                    stampa="";
+                }
+                printer.printFormattedText(stampa, dotsFeedPaper);
             }
             callbackContext.success();
         } catch (EscPosConnectionException e) {
