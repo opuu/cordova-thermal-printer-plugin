@@ -1,18 +1,6 @@
-# Cordova Plugin for Thermal Printer's Customized for Sunmi V2s Pos Printer
-
-## Fork NOTE
-
-I added to the plugin from which I forked, a series of methods for printing text messages and images in base 64 format.
-The plugin has been tested on cordova 13 and on Sunmi V2s printer.
-
-After importing the plugin with the install procedure from this repository, import the SunmiV2sEscPos.js file into your project to view the various commands.
-
-Connection to Sunmi V2s Printer is via bluetooth on address 00:11:22:33:44:55 .
-
-I leave the original documentation of the plugin below.
-
 ## Cordova Plugin for Thermal Printer's
-[![npm version](https://img.shields.io/npm/v/thermal-printer-cordova-plugin.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin) [![npm downloads](https://img.shields.io/npm/dm/thermal-printer-cordova-plugin.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin)
+
+[![npm version](https://img.shields.io/npm/v/thermal-printer-cordova-plugin-modified.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin-modified) [![npm downloads](https://img.shields.io/npm/dm/thermal-printer-cordova-plugin-modified.svg)](https://www.npmjs.com/package/thermal-printer-cordova-plugin-modified)
 
 ---
 
@@ -22,8 +10,16 @@ This plugin is a wrapper for the [Android library for ESC/POS Thermal Printer](h
 
 #### Cordova
 
-    $ cordova plugin add https://github.com/SaverioDiDomenico/cordova-thermal-printer-plugin
+    $ cordova plugin add thermal-printer-cordova-plugin-modified
 
+#### Ionic
+
+    $ ionic cordova plugin add thermal-printer-cordova-plugin-modified
+
+#### Capacitor
+
+    $ npm install thermal-printer-cordova-plugin-modified
+    $ npx cap sync
 
 Don't forget to add BLUETOOTH and INTERNET (for TCP) permissions and for USB printers the `android.hardware.usb.host` feature to the `AndroidManifest.xml`.
 
@@ -38,7 +34,15 @@ Don't forget to add BLUETOOTH and INTERNET (for TCP) permissions and for USB pri
 Run this for getting Bluetooth access permission if needed
 
 ```javascript
-ThermalPrinter.requestBTPermissions({type: 'bluetooth'}, function(result){ console.log(result) }, function(error){ console.log(error) });
+ThermalPrinter.requestBTPermissions(
+  { type: "bluetooth" },
+  function (result) {
+    console.log(result);
+  },
+  function (error) {
+    console.log(error);
+  }
+);
 ```
 
 ### Examples
@@ -48,7 +52,7 @@ ThermalPrinter.requestBTPermissions({type: 'bluetooth'}, function(result){ conso
 You can easily import and use the ThermalPrinter plugin in your TypeScript-Projects.
 
 ```typescript
-import { ThermalPrinterPlugin } from 'thermal-printer-cordova-plugin/src';
+import { ThermalPrinterPlugin } from "thermal-printer-cordova-plugin-modified/src";
 
 declare let ThermalPrinter: ThermalPrinterPlugin;
 ```
@@ -63,7 +67,7 @@ Printing via Bluetooth is as easy as possible.
 ThermalPrinter.printFormattedText({
     type: 'bluetooth',
     id: 'first', // You can also use the identifier directly i. e. 00:11:22:33:44:55 (address) or name
-    text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
+    text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
 }, function() {
     console.log('Successfully printed!');
 }, function(error) {
@@ -84,7 +88,7 @@ ThermalPrinter.printFormattedText({
     address: '192.168.1.123',
     port: 9100,
     id: 'tcp-printer-001', // Use an unique identifier for each printer i. e. address:port or name
-    text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
+    text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
 }, function() {
     console.log('Successfully printed!');
 }, function(error) {
@@ -110,7 +114,7 @@ ThermalPrinter.listPrinters({type: 'usb'}, function(printers) {
             ThermalPrinter.printFormattedText({
                 type: 'usb',
                 id: printer.id,
-                text: "[C]<u><font size='big'>Hello World</font></u>" // new lines with "\n"
+                text: '[C]<u><font size='big'>Hello World</font></u>' // new lines with "\n"
             }, function() {
                 console.log('Successfully printed!');
             }, function(error) {
@@ -128,135 +132,142 @@ ThermalPrinter.listPrinters({type: 'usb'}, function(printers) {
 ```
 
 ### listPrinters(data, successCallback, errorCallback)
+
 List available printers
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;usb&quot;</code> | Type of list: bluetooth or usb |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param           | Type                                                               | Description                    |
+| --------------- | ------------------------------------------------------------------ | ------------------------------ |
+| data            | <code>Object</code>                                                | Data object                    |
+| data.type       | <code>&quot;bluetooth&quot;</code> \| <code>&quot;usb&quot;</code> | Type of list: bluetooth or usb |
+| successCallback | <code>function</code>                                              | Result on success              |
+| errorCallback   | <code>function</code>                                              | Result on failure              |
 
 <a name="printFormattedText"></a>
 
 ### printFormattedText(data, successCallback, errorCallback)
+
 Print a formatted text and feed paper
 
-**See**: https://github.com/DantSu/ESCPOS-ThermalPrinter-Android#formatted-text--syntax-guide  
+**See**: https://github.com/DantSu/ESCPOS-ThermalPrinter-Android#formatted-text--syntax-guide
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| [data.mmFeedPaper] | <code>number</code><code>optional</code> | Millimeter distance feed paper at the end |
-| [data.dotsFeedPaper] | <code>number</code><code>optional</code> | Distance feed paper at the end |
-| [data.printerDpi] | <code>number</code><code>optional</code> | Printer DPI |
-| [data.printerWidthMM] | <code>number</code><code>optional</code> | Paper Width in mm |
-| [data.printerNbrCharactersPerLine] | <code>number</code><code>optional</code> | Number of characters per line |
-| data.text | <code>string</code> | Formatted text to be printed |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param                              | Type                                                                                               | Description                                                                                |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data                               | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type                          | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]                          | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]                     | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]                        | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| [data.mmFeedPaper]                 | <code>number</code><code>optional</code>                                                           | Millimeter distance feed paper at the end                                                  |
+| [data.dotsFeedPaper]               | <code>number</code><code>optional</code>                                                           | Distance feed paper at the end                                                             |
+| [data.printerDpi]                  | <code>number</code><code>optional</code>                                                           | Printer DPI                                                                                |
+| [data.printerWidthMM]              | <code>number</code><code>optional</code>                                                           | Paper Width in mm                                                                          |
+| [data.printerNbrCharactersPerLine] | <code>number</code><code>optional</code>                                                           | Number of characters per line                                                              |
+| data.text                          | <code>string</code>                                                                                | Formatted text to be printed                                                               |
+| successCallback                    | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback                      | <code>function</code>                                                                              | Result on failure                                                                          |
 
 <a name="printFormattedTextAndCut"></a>
 
 ### printFormattedTextAndCut(data, successCallback, errorCallback)
+
 Print a formatted text, feed paper and cut the paper
 
-**See**: https://github.com/DantSu/ESCPOS-ThermalPrinter-Android#formatted-text--syntax-guide  
+**See**: https://github.com/DantSu/ESCPOS-ThermalPrinter-Android#formatted-text--syntax-guide
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| [data.mmFeedPaper] | <code>number</code><code>optional</code> | Millimeter distance feed paper at the end |
-| [data.dotsFeedPaper] | <code>number</code><code>optional</code> | Distance feed paper at the end |
-| [data.printerDpi] | <code>number</code><code>optional</code> | Printer DPI |
-| [data.printerWidthMM] | <code>number</code><code>optional</code> | Paper Width in mm |
-| [data.printerNbrCharactersPerLine] | <code>number</code><code>optional</code> | Number of characters per line |
-| data.text | <code>string</code> | Formatted text to be printed |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param                              | Type                                                                                               | Description                                                                                |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data                               | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type                          | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]                          | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]                     | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]                        | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| [data.mmFeedPaper]                 | <code>number</code><code>optional</code>                                                           | Millimeter distance feed paper at the end                                                  |
+| [data.dotsFeedPaper]               | <code>number</code><code>optional</code>                                                           | Distance feed paper at the end                                                             |
+| [data.printerDpi]                  | <code>number</code><code>optional</code>                                                           | Printer DPI                                                                                |
+| [data.printerWidthMM]              | <code>number</code><code>optional</code>                                                           | Paper Width in mm                                                                          |
+| [data.printerNbrCharactersPerLine] | <code>number</code><code>optional</code>                                                           | Number of characters per line                                                              |
+| data.text                          | <code>string</code>                                                                                | Formatted text to be printed                                                               |
+| successCallback                    | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback                      | <code>function</code>                                                                              | Result on failure                                                                          |
 
 <a name="getEncoding"></a>
 
 ### getEncoding(data, successCallback, errorCallback)
+
 Get the printer encoding when available
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param           | Type                                                                                               | Description                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data            | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type       | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]       | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]  | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]     | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| successCallback | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback   | <code>function</code>                                                                              | Result on failure                                                                          |
 
 <a name="disconnectPrinter"></a>
 
 ### disconnectPrinter(data, successCallback, errorCallback)
+
 Close the connection with the printer
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param           | Type                                                                                               | Description                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data            | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type       | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]       | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]  | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]     | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| successCallback | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback   | <code>function</code>                                                                              | Result on failure                                                                          |
 
 <a name="requestPermissions"></a>
 
 ### requestPermissions(data, successCallback, errorCallback)
+
 Request permissions for USB printers
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
-
+| Param           | Type                                                                                               | Description                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data            | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type       | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]       | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]  | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]     | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| successCallback | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback   | <code>function</code>                                                                              | Result on failure                                                                          |
 
 <a name="requestBTPermissions"></a>
 
 ### requestBTPermissions(data, successCallback, errorCallback)
+
 Request permissions for bluetooth
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> | List all bluetooth or usb printers |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param           | Type                               | Description                        |
+| --------------- | ---------------------------------- | ---------------------------------- |
+| data            | <code>Array.&lt;Object&gt;</code>  | Data object                        |
+| data.type       | <code>&quot;bluetooth&quot;</code> | List all bluetooth or usb printers |
+| successCallback | <code>function</code>              | Result on success                  |
+| errorCallback   | <code>function</code>              | Result on failure                  |
 
 <a name="bitmapToHexadecimalString"></a>
 
 ### bitmapToHexadecimalString(data, successCallback, errorCallback)
+
 Convert Drawable instance to a hexadecimal string of the image data
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Array.&lt;Object&gt;</code> | Data object |
-| data.type | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers |
-| [data.id] | <code>string</code> \| <code>number</code> | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
-| [data.address] | <code>string</code> | If type is "tcp" then the IP Address of the printer |
-| [data.port] | <code>number</code> | If type is "tcp" then the Port of the printer |
-| [data.mmFeedPaper] | <code>number</code><code>optional</code> | Millimeter distance feed paper at the end |
-| [data.dotsFeedPaper] | <code>number</code><code>optional</code> | Distance feed paper at the end |
-| [data.printerDpi] | <code>number</code><code>optional</code> | Printer DPI |
-| [data.printerWidthMM] | <code>number</code><code>optional</code> | Paper Width in mm |
-| data.base64 | <code>string</code> | Base64 encoded picture string to convert |
-| successCallback | <code>function</code> | Result on success |
-| errorCallback | <code>function</code> | Result on failure |
+| Param                 | Type                                                                                               | Description                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| data                  | <code>Array.&lt;Object&gt;</code>                                                                  | Data object                                                                                |
+| data.type             | <code>&quot;bluetooth&quot;</code> \| <code>&quot;tcp&quot;</code> \| <code>&quot;usb&quot;</code> | List all bluetooth or usb printers                                                         |
+| [data.id]             | <code>string</code> \| <code>number</code>                                                         | ID of printer to find (Bluetooth: address, TCP: Use address + port instead, USB: deviceId) |
+| [data.address]        | <code>string</code>                                                                                | If type is "tcp" then the IP Address of the printer                                        |
+| [data.port]           | <code>number</code>                                                                                | If type is "tcp" then the Port of the printer                                              |
+| [data.mmFeedPaper]    | <code>number</code><code>optional</code>                                                           | Millimeter distance feed paper at the end                                                  |
+| [data.dotsFeedPaper]  | <code>number</code><code>optional</code>                                                           | Distance feed paper at the end                                                             |
+| [data.printerDpi]     | <code>number</code><code>optional</code>                                                           | Printer DPI                                                                                |
+| [data.printerWidthMM] | <code>number</code><code>optional</code>                                                           | Paper Width in mm                                                                          |
+| data.base64           | <code>string</code>                                                                                | Base64 encoded picture string to convert                                                   |
+| successCallback       | <code>function</code>                                                                              | Result on success                                                                          |
+| errorCallback         | <code>function</code>                                                                              | Result on failure                                                                          |
