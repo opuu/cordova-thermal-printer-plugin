@@ -285,10 +285,48 @@ public class ThermalPrinterCordovaPlugin extends CordovaPlugin {
         try {
             int dotsFeedPaper = data.has("mmFeedPaper")
                 ? printer.mmToPx((float) data.getDouble("mmFeedPaper"))
-                : data.optInt("dotsFeedPaper", 20);
+                : data.optInt("dotsFeedPaper", 1);
             if (action.endsWith("Cut")) {
                 printer.printFormattedTextAndCut(data.getString("text"), dotsFeedPaper);
-            } else {
+            }else if(data.getString("text").contains("data:image")){
+                //Saverio
+
+                String encodedString = data.getString("text");
+                byte[] decodedString = Base64.decode(encodedString.contains(",") ? encodedString.substring(encodedString.indexOf(",") + 1) : encodedString, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                int width = decodedByte.getWidth(), height = decodedByte.getHeight();
+
+                
+                int maxSize = 850;
+                int outWidth;
+                int outHeight;
+                /*
+                if(width > height){
+                    outWidth = maxSize;
+                    outHeight = (height * maxSize) / width; 
+                } else {
+                    outHeight = maxSize;
+                    outWidth = (width * maxSize) / height; 
+                }
+                */
+
+                outWidth = width;
+                outHeight = height;
+
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(decodedByte, outWidth, outHeight, false);
+
+                StringBuilder textToPrint = new StringBuilder();
+                for(int y = 0; y < outHeight; y += 256) {
+                    Bitmap bitmap = Bitmap.createBitmap(resizedBitmap, 0, y, outWidth, (y + 256 >= outHeight) ? outHeight - y : 256);
+                    textToPrint.append("[L]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, bitmap) + "</img>\n");
+                }
+                
+                //textToPrint.append("[C]Printed!!!\n");
+                printer.printFormattedText(textToPrint.toString());
+                
+                
+            }else {
                 printer.printFormattedText(data.getString("text"), dotsFeedPaper);
             }
             callbackContext.success();
